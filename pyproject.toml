@@ -41,6 +41,11 @@ dev = [
 requires = ["setuptools>=73.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[tool.poetry]
+packages = [
+    { include = "deepagents", from = "libs" },
+]
+
 [tool.setuptools]
 [tool.setuptools.packages.find]
 where = ["libs"]

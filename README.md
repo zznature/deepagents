@@ -25,6 +25,41 @@ uv add deepagents
 poetry add deepagents
 ```
 
+## Local Development Setup
+
+Follow these steps if you’re working on the repository itself instead of consuming the published package.
+
+1. **Install Python 3.11+**  
+   `deepagents` targets `>=3.11,<4.0`. If you use `pyenv`, run:
+   ```bash
+   pyenv install 3.11.9  # or any 3.11/3.12 release you prefer
+   pyenv local 3.11.9
+   ```
+   Verify the interpreter with `python --version`.
+
+2. **Install Poetry**  
+   Follow [Poetry’s installation guide](https://python-poetry.org/docs/#installation) if it isn’t already available.
+
+3. **Create the virtual environment**  
+   Point Poetry at the desired interpreter and install dependencies:
+   ```bash
+   poetry env use $(pyenv which python)  # or: poetry env use python3.11
+   poetry install
+   ```
+   Poetry will install the `deepagents` package from `libs/deepagents` along with any locked dependencies.
+
+4. **Run the test suite (optional)**  
+   ```bash
+   poetry run pytest
+   ```
+   This executes the repository’s tests inside the Poetry-managed environment.
+
+5. **Activate the shell when iterating**  
+   ```bash
+   poetry shell
+   ```
+   Alternatively, prefix commands with `poetry run ...`.
+
 ## Usage
 
 (To run the example below, you will need to `pip install tavily-python`).
