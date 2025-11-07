@@ -30,10 +30,10 @@ poetry add deepagents
 Follow these steps if you’re working on the repository itself instead of consuming the published package.
 
 1. **Install Python 3.11+**  
-   `deepagents` targets `>=3.11,<4.0`. If you use `pyenv`, run:
+   `deepagents` targets `>=3.11,<3.14`. If you use `pyenv`, run:
    ```bash
-   pyenv install 3.11.9  # or any 3.11/3.12 release you prefer
-   pyenv local 3.11.9
+   pyenv install 3.12.7  # or any 3.11/3.12 release you prefer
+   pyenv local 3.12.7
    ```
    Verify the interpreter with `python --version`.
 
