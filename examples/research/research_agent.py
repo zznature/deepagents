@@ -2,10 +2,41 @@ import os
 from typing import Literal
 
 from deepagents import create_deep_agent
+from langchain_anthropic import ChatAnthropic
 from tavily import TavilyClient
 
 # It's best practice to initialize the client once and reuse it.
 tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
+
+
+# Load model from environment variables if configured
+def get_model():
+    """Get the model from environment variables or use default.
+    
+    Supports:
+    - Standard Anthropic API: Set ANTHROPIC_API_KEY and optionally ANTHROPIC_MODEL
+    - 3rd party Claude provider: Set ANTHROPIC_API_KEY, ANTHROPIC_API_URL (or ANTHROPIC_BASE_URL), and ANTHROPIC_MODEL
+    
+    For 3rd party providers, ChatAnthropic accepts base_url parameter to override the API endpoint.
+    """
+    anthropic_api_key = os.environ.get("ANTHROPIC_API_KEY")
+    anthropic_api_url = os.environ.get("ANTHROPIC_API_URL") or os.environ.get("ANTHROPIC_BASE_URL")
+    anthropic_model = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-5-20250929")
+    
+    if anthropic_api_key:
+        model_kwargs = {
+            "model_name": anthropic_model,
+            "max_tokens": 20000,
+        }
+        # Add custom API URL if provided (for 3rd party providers)
+        # ChatAnthropic uses 'base_url' parameter for custom endpoints
+        if anthropic_api_url:
+            model_kwargs["base_url"] = anthropic_api_url
+        
+        return ChatAnthropic(**model_kwargs)
+    
+    # Return None to use default model
+    return None
 
 
 # Search tool to use to do research
@@ -158,7 +189,11 @@ Use this to run an internet search for a given query. You can specify the number
 """
 
 # Create the agent
+# Load model from environment variables if configured, otherwise use default
+model = get_model()
+
 agent = create_deep_agent(
+    model=model,  # Pass None to use default, or pass model instance from env
     tools=[internet_search],
     system_prompt=research_instructions,
     subagents=[critique_sub_agent, research_sub_agent],
